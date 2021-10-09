@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.keepnotes.data.dao.NoteDatabase
 import com.example.keepnotes.data.repository.NoteRepositoryImpl
 import com.example.keepnotes.domain.repository.NoteRepository
+import com.example.keepnotes.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,16 @@ object AppModule {
     @Singleton
     fun providesNoteRepository(db: NoteDatabase) : NoteRepository{
         return NoteRepositoryImpl(dao = db.noteDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providesNoteUseCase(repository: NoteRepository) : NoteUseCase{
+        return NoteUseCase(
+            addNote = AddNote(repository = repository),
+            getNote = GetNote(repository = repository),
+            getNotes = GetNotes(repository = repository),
+            deleteNote = DeleteNote(repository = repository)
+        )
     }
 }

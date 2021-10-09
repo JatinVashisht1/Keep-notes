@@ -1,6 +1,6 @@
 package com.example.keepnotes.domain.use_case
 
-data class GetNoteUseCase (
+data class NoteUseCase (
     val addNote: AddNote,
     val getNote: GetNote,
     val getNotes: GetNotes,

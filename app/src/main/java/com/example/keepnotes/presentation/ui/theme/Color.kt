@@ -1,4 +1,4 @@
-package com.example.keepnotes.ui.theme
+package com.example.keepnotes.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

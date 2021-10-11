@@ -30,33 +30,35 @@ class NotesViewModel @Inject constructor(
     }
 
     fun onEvent(event: NotesEvent){
-        when(event){
-            is NotesEvent.DeleteNote -> {
-                viewModelScope.launch {
-                    noteUseCase.deleteNote(event.note)
-                    recentlyDeletedNote = event.note
+//        viewModelScope.launch {
+            when (event) {
+                is NotesEvent.DeleteNote -> {
+                    viewModelScope.launch {
+                        noteUseCase.deleteNote(event.note)
+                        recentlyDeletedNote = event.note
+                    }
                 }
-            }
-            is NotesEvent.Order -> {
-                if(state.value.noteOrder::class == event.noteOrder::class &&
-                   state.value.noteOrder.orderType::class == event.noteOrder.orderType::class
-                ){
-                    return
+                is NotesEvent.Order -> {
+                    if (state.value.noteOrder::class == event.noteOrder::class &&
+                        state.value.noteOrder.orderType::class == event.noteOrder.orderType::class
+                    ) {
+                        return
+                    }
+                    getNotes(event.noteOrder)
                 }
-                getNotes(event.noteOrder)
-            }
-            is NotesEvent.RestoreNote -> {
-                viewModelScope.launch {
-                noteUseCase.addNote(recentlyDeletedNote ?: return@launch)
+                is NotesEvent.RestoreNote -> {
+                    viewModelScope.launch {
+                        noteUseCase.addNote(recentlyDeletedNote ?: return@launch)
+                    }
                 }
-            }
-            is NotesEvent.ToggleOrderSelection -> {
-                _state.value = _state.value.copy(
-                    isSelectionOrderVisible = !state.value.isSelectionOrderVisible
-                )
+                is NotesEvent.ToggleOrderSelection -> {
+                    _state.value = _state.value.copy(
+                        isSelectionOrderVisible = !state.value.isSelectionOrderVisible
+                    )
+                }
             }
         }
-    }
+//    }
 
     private fun getNotes(noteOrder: NoteOrder){
         getNotesJob?.cancel()

@@ -46,7 +46,7 @@ fun NoteListScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .wrapContentHeight()
                 .padding(8.dp)
         ) {
             Row(
@@ -67,23 +67,26 @@ fun NoteListScreen(
                 visible = state.isSelectionOrderVisible,
                 enter = fadeIn() + slideInVertically(),
                 exit = fadeOut() + slideOutVertically()
-            ){
+            ) {
                 OrderSection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp),
                     noteOrder = state.noteOrder,
-                    onOrderChange = {viewModel.onEvent(NotesEvent.Order(it))}
+                    onOrderChange = { viewModel.onEvent(NotesEvent.Order(it)) }
                 )
+            }
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize()){
                     items(state.notes){note->
                         NoteItem(
                             note = note,
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxSize()
                                 .clickable {
-                                    navController.navigate(Screen.AddEditNoteScreen.route + "?noteId=${note.id}}")
+                                    scope.launch {
+                                        navController.navigate(Screen.AddEditNoteScreen.route)
+                                    }
                                 },
                             onDeleteClick = {
                                 viewModel.onEvent(NotesEvent.DeleteNote(note))
@@ -101,7 +104,7 @@ fun NoteListScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
-            }
+
         }
     }
 }

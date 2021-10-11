@@ -20,7 +20,7 @@ fun NoteItem(
     onDeleteClick: () -> Unit
 ) {
     Box(modifier = modifier){
-        Card(modifier = Modifier.matchParentSize()) {
+        Card(modifier = Modifier.wrapContentSize(), backgroundColor = MaterialTheme.colors.secondary) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
